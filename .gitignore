@@ -1,0 +1,10 @@
+migrations
+config/secrets.json
+db.sqlite3
+__pycache__
+prev
+frontend/static
+uploads/
+venv/
+test_data/
+node_modules/
