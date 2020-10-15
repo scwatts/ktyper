@@ -1,0 +1,20 @@
+# Frontend
+* update job info if change in job results found while polling
+
+* use segments rather than grid for job list
+
+* localStorage to have persistent list of tokens
+* always have scroll bar
+
+* button to force refresh
+
+* adding token that is already in state.job_tokens
+  - remove from array and add to top
+
+* axios to use multipart POST?
+  - large files quickly filing /tmp/
+
+# Backend
+* directories for uploads, by session name?
+* return memorable unique token, search for existing implementations
+* tasks queued by huey

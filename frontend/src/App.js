@@ -1,0 +1,100 @@
+import React from 'react';
+import { Router, Route, Switch } from "react-router-dom";
+import { Container } from 'semantic-ui-react'
+
+
+import history from "./history";
+
+
+import HomePage from './HomePage'
+import JobsPage from './JobsPage'
+import MissingPage from './MissingPage'
+import MenuComponent from './components/MenuComponent'
+import ResultsPage from './ResultsPage'
+import SubmitPage from './SubmitPage'
+
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {job_data: []};
+    this.addJobData = this.addJobData.bind(this);
+    this.removeJobData = this.removeJobData.bind(this);
+    this.updateJobData = this.updateJobData.bind(this);
+  };
+
+  addJobData(data) {
+    // Remove job data to restack if present
+    if (this.state.job_data.findIndex(d => d.id == data.id) > -1) {
+      this.removeJobData(data.id);
+    }
+    // Add
+    this.setState({job_data: this.state.job_data.concat(data)});
+  }
+
+  removeJobData(id) {
+    this.setState({job_data: this.state.job_data.filter(d => d.id != id)});
+  }
+
+  updateJobData(data) {
+    this.setState({
+      job_data: this.state.job_data.map(d => {
+        if (d.id == data.id) {
+          return data;
+         } else {
+           return d;
+         }
+      })
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <Router history={history}>
+          <MenuComponent />
+          <Container text style={{ marginTop: '7em' }}>
+              <Switch>
+                <Route exact path='/'>
+                  <HomePage />
+                </Route>
+                <Route exact path='/submit'>
+                  <SubmitPage
+                    addJobData={this.addJobData}
+                  />
+                </Route>
+                <Route exact path='/jobs'>
+                  <JobsPage
+                    job_data={this.state.job_data}
+                    addJobData={this.addJobData}
+                    removeJobData={this.removeJobData}
+                    updateJobData={this.updateJobData}
+                  />
+                </Route>
+                {/* two routes for results; one with token and one without */}
+                <Route exact path='/results/:token/'
+                  render={props => <ResultsPage
+                      addJobData={this.addJobData}
+                      updateJobData={this.updateJobData}
+                      {...props}
+                    />
+                  }
+                />
+                <Route path='/results'>
+                  <ResultsPage
+                    addJobData={this.addJobData}
+                    updateJobData={this.updateJobData}
+                  />
+                </Route>
+                <Route path='/*'>
+                  <MissingPage />
+                </Route>
+              </Switch>
+          </Container>
+        </Router>
+      </>
+    );
+  }
+}
+
+export default App;

@@ -1,0 +1,29 @@
+.ui.button {
+  float: right;
+}
+
+#token_grid {
+  width: 400px;
+  margin: auto;
+  padding-top: 20px;
+}
+
+#token_grid .column {
+  padding: 0px
+}
+
+#data_column {
+  width: 350px !important;
+}
+
+#button_column {
+  width: 50px !important;
+}
+
+#data_column a.content {
+  cursor: pointer;
+}
+
+#button_column i {
+  cursor: pointer;
+}
