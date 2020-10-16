@@ -1,7 +1,0 @@
-.table tr.visible.transition {
-  display: table-row !important;
-}
-
-.ui.button:not(.icon) > .icon:not(.button):not(.dropdown) {
-  margin: auto !important;
-}

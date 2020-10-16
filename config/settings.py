@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 
 
 from django.core.exceptions import ImproperlyConfigured
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'huey.contrib.djhuey',
     'frontend',
     'backend',
 ]
@@ -71,17 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# REST
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        #'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.AllowAny',
-    )
-}
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 DATABASES = {
@@ -107,6 +98,31 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
+    )
+}
+
+# HUEY task queue
+HUEY = {
+    'name': DATABASES['default']['NAME'],
+    'huey_class': 'huey.SqliteHuey',
+    'immediate': False,
+    'consumer': {
+        'blocking': True,
+        'loglevel': logging.DEBUG,
+        'workers': 2,
+        'scheduler_interval': 1,
+        'simple_log': True,
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

@@ -94,14 +94,12 @@ class SubmitPage extends React.Component {
     };
     axios.post('/api/v1/submit/', data, config)
       .then(resp => {
-        // TODO: determine if this is necessary; ResultsPage will automatically do this rn
-        //this.props.addJobData(resp.data);
         this.setState({
           processing: false,
           uploading: false,
           upload_complete: true,
         });
-        history.push(`/results/${resp.data.id}/`);
+        history.push(`/results/${resp.data.uuid}/`);
       })
       .catch(error => {
         this.setState({processing: false});
@@ -129,7 +127,7 @@ class SubmitPage extends React.Component {
           icon='info circle'
           size='mini'
           header='We accept multiple file formats'
-          content='You can provide a single fid spectra file or multiple in an archive format (.zip or .tar.gz)'
+          content='Spectra can be packaged into either a .zip or .tar.gz archive'
         />
         <Form>
           <Form.Input

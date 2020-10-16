@@ -1,10 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { Button, Form, Header, Message } from 'semantic-ui-react'
+import { Button, Form, Header, Icon, Message, Segment } from 'semantic-ui-react';
 
 
 import history from './history';
-import ResultsTableComponent from './components/ResultsTableComponent'
+import './ResultsPage.css';
+import ResultsTableComponent from './components/ResultsTableComponent';
 
 
 class ResultsPage extends React.Component {
@@ -13,20 +14,22 @@ class ResultsPage extends React.Component {
     this.state = {
       job_token: '',
       query_value: '',
-      job_data: {},
+      job_data: [],
+      job_results: {},
       error_token: false,
       error_token_msg: '',
     };
-    //this.pollResults = this.pollResults.bind(this);
+    this.pollResults = this.pollResults.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.validateToken = this.validateToken.bind(this);
     this.prepareResults = this.prepareResults.bind(this);
-    this.getResults = this.getResults.bind(this);
+    this.getJobResults = this.getJobResults.bind(this);
+    this.getJobData = this.getJobData.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
   };
 
   componentDidMount() {
-    //this.timer = setInterval(() => this.pollResults(), 30000);
+    this.timer = setInterval(() => this.pollResults(), 1000);
     this.prepareResults();
   }
 
@@ -37,13 +40,26 @@ class ResultsPage extends React.Component {
   }
 
   componentWillUnmount() {
-  //  clearInterval(this.timer);
+    clearInterval(this.timer);
+  }
+
+
+  pollResults () {
+    // NOTE: this is a little wasteful; conditionally retrieve job_results once
+    // status is complete would be better
+    if (this.state.job_data.status != 'completed' && this.state.job_data.uuid) {
+      if (this.validateToken(this.state.job_data.uuid)) {
+        this.getJobData(this.state.job_data.uuid);
+        this.getJobResults(this.state.job_data.uuid);
+      }
+    }
   }
 
   prepareResults() {
     if (this.props.match !== undefined) {
       if (this.validateToken(this.props.match.params.token)) {
-        this.getResults(this.props.match.params.token);
+        this.getJobResults(this.props.match.params.token);
+        this.getJobData(this.props.match.params.token);
       } else {
         this.setState({query_value: this.props.match.params.token});
       }
@@ -71,16 +87,38 @@ class ResultsPage extends React.Component {
     if (job_token == '') {
       this.setState({error_token: true, error_token_msg: 'Token is required'});
       return false
-    } else if (! /^[0-9]+$/.test(job_token)) {
-      this.setState({error_token: true, error_token_msg: 'Token must be a number'});
+    } else if (! /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(job_token)) {
+      this.setState({error_token: true, error_token_msg: 'Token must be a UUID'});
       return false
     } else {
       return true
     }
   }
 
-  getResults(job_token) {
+  getJobResults(job_token) {
     axios.get(`/api/v1/resultsdata/${job_token}/`)
+      .then(resp => {
+        this.setState({
+          job_results: resp.data['results'],
+          query_value: ''
+        })
+      })
+      .catch(error => {
+        if (error.response) {
+          if ('token' in error.response.data) {
+            this.setState({
+              error_token: true,
+              error_token_msg: error.response.data['token']
+            });
+          }
+        } else {
+          console.log(error)
+        }
+    });
+  }
+
+  getJobData(job_token) {
+    axios.get(`/api/v1/jobdata/${job_token}/`)
       .then(resp => {
         this.props.addJobData(resp.data),
         this.setState({
@@ -108,14 +146,14 @@ class ResultsPage extends React.Component {
   };
 
   render() {
-    return (
+    const header = (
       <>
         <Header as='h1'>Results</Header>
         <Message
           icon='info circle'
           size='mini'
           header='Enter token to view job results or access existing entries on Jobs page'
-          content='Results of incomplete jobs will be automatically updated every 30 seconds.'
+          content='Results of incomplete jobs will be automatically updated every second.'
         />
         <Form>
           <Form.Input
@@ -136,15 +174,61 @@ class ResultsPage extends React.Component {
             }
           />
         </Form>
+      </>
+    );
+
+    if (this.state.job_token == '') {
+      return (
+        <>
+          {header}
+        </>
+      );
+    }
+
+    return (
+      <>
+        {header}
         {this.state.job_token &&
           <>
-            <Header as='h3'>{this.state.job_data.id} : {this.state.job_data.name}</Header>
-            <ResultsTableComponent job_data={this.state.job_data} />
+            <Header as='h3' id='result_table_header'>{this.state.job_data.name}</Header>
+            <Header.Subheader>{this.state.job_data.uuid}</Header.Subheader>
           </>
+        }
+        {this.state.job_results.length > 0  && this.state.job_data.status == 'completed' ?
+              <ResultsTableComponent job_results={this.state.job_results} />
+            :
+              <>
+                <Segment placeholder>
+                  <Header icon>
+                    {renderJobIcon(this.state.job_data.status)}
+                    Job is {this.state.job_data.status}
+                  </Header>
+                </Segment>
+              </>
         }
       </>
     );
   }
 }
+
+
+// TODO: reused from ResultsPage.js, cleanup
+function renderJobIcon(job_status) {
+  switch(job_status) {
+    case 'initialising':
+      return <Icon loading name='circle notch' />;
+    case 'queued':
+      return <Icon name='boxes' />;
+    case 'running':
+      return <Icon loading name='cog' />;
+    case 'completed':
+      return <Icon name='check circle outline' color='green' />;
+    case 'failed':
+      return <Icon name='exclamation circle' color='red' />;
+    default:
+      return <Icon name='question circle outline' />;
+  }
+}
+
 
 export default ResultsPage;

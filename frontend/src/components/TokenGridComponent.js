@@ -34,14 +34,18 @@ class TokenGridComponent extends React.Component {
           divided='vertically'
           duration={200}
           animation='fade'
+          columns={2}
         >
           {this.props.job_data.slice().reverse().map(d =>
-            <Grid.Row key={d.id} columns={2}>
+            <Grid.Row key={d.uuid}>
               <Grid.Column id='data_column'>
                 <Header as='h4' image>
                   {renderJobIcon(d.status)}
-                  <Header.Content as='a' onClick={() => this.handleDataClick(d.id)}>
-                    {d.id} : {d.name}
+                  <Header.Content as='a' onClick={() => this.handleDataClick(d.uuid)}>
+                    {d.name}
+                    <Header.Subheader>
+                      {d.uuid}
+                    </Header.Subheader>
                     <Header.Subheader>
                       {d.status.charAt(0).toUpperCase() + d.status.slice(1)}
                     </Header.Subheader>
@@ -50,7 +54,7 @@ class TokenGridComponent extends React.Component {
                 </Header>
               </Grid.Column>
               <Grid.Column verticalAlign='middle' id='button_column'>
-                <Icon as='i' name='trash alternate outline' color='red' onClick={() => this.props.removeJobData(d.id)} />
+                <Icon as='i' id='delete_button' name='trash alternate outline' color='red' onClick={() => this.props.removeJobData(d.uuid)} />
               </Grid.Column>
             </Grid.Row>
           )}

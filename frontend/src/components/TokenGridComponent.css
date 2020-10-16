@@ -27,3 +27,7 @@
 #button_column i {
   cursor: pointer;
 }
+
+#delete_button {
+  padding-top: 26px;
+}

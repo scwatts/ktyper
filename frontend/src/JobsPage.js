@@ -21,8 +21,12 @@ class JobsPage extends React.Component {
     this.handleJobTokenChange = this.handleJobTokenChange.bind(this);
   }
 
+  componentWillMount() {
+    this.pollIncompleteJobs();
+  }
+
   componentDidMount() {
-    this.timer = setInterval(() => this.pollIncompleteJobs(), 30000);
+    this.timer = setInterval(() => this.pollIncompleteJobs(), 1000);
   }
 
   componentWillUnmount() {
@@ -35,7 +39,7 @@ class JobsPage extends React.Component {
         case 'initialising':
         case 'queued':
         case 'running':
-          axios.get(`/api/v1/jobdata/${d.id}/`)
+          axios.get(`/api/v1/jobdata/${d.uuid}/`)
             .then(resp => {
               this.props.updateJobData(resp.data);
             })
@@ -59,8 +63,8 @@ class JobsPage extends React.Component {
     if (this.state.job_token == '') {
       this.setState({error_token: true, error_token_msg: 'Token is required'});
       return false
-    } else if (! /^[0-9]+$/.test(this.state.job_token)) {
-      this.setState({error_token: true, error_token_msg: 'Token must be a number'});
+    } else if (! /^[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i.test(this.state.job_token)) {
+      this.setState({error_token: true, error_token_msg: 'Token must be a UUID'});
       return false
     } else {
       return true
@@ -96,7 +100,7 @@ class JobsPage extends React.Component {
           icon='info circle'
           size='mini'
           header='Add jobs here by their token to track progress'
-          content='Status of all incomplete jobs will be automatically updated every 30 seconds. Click a job entry to view results.'
+          content='Status of all incomplete jobs will be automatically updated every second. Click a job entry to view results.'
         />
         <Form>
           <Form.Input
@@ -110,7 +114,7 @@ class JobsPage extends React.Component {
             action={
               <Button
                 primary
-                content='Add Token'
+                content='Add Job'
                 type='button'
                 onClick={this.handleSubmit}
               />

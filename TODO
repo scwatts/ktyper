@@ -1,20 +1,29 @@
-# Frontend
-* update job info if change in job results found while polling
+# Start
+* failed jobs on results page
+   - Last element of the Step indicator to be swapped for failed
 
-* use segments rather than grid for job list
+# Frontend
+* need more information about token - explicitly tell user to retain and use to retrieve results later
+  - modal on submission before redirect?
+
+* results table
+  - button for more info; slide-in element?
+  - colour cells of entries that fail classification
+  - button(s) to filter for failed, success, species?
+    - clearable dropdown for failed/successed
+  - dropdown with search for species to select and multi selection
+  - handle pagination
 
 * localStorage to have persistent list of tokens
 * always have scroll bar
 
-* button to force refresh
-
-* adding token that is already in state.job_tokens
-  - remove from array and add to top
-
+* button to force refresh?
+* use segments rather than grid for job list?
 * axios to use multipart POST?
   - large files quickly filing /tmp/
 
 # Backend
-* directories for uploads, by session name?
-* return memorable unique token, search for existing implementations
-* tasks queued by huey
+* memorable unique token rather than uuid?
+
+* split classification into individual spectracl calls
+  - if one bad fid in call, then all will fail

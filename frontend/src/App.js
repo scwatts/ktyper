@@ -25,21 +25,21 @@ class App extends React.Component {
 
   addJobData(data) {
     // Remove job data to restack if present
-    if (this.state.job_data.findIndex(d => d.id == data.id) > -1) {
-      this.removeJobData(data.id);
+    if (this.state.job_data.findIndex(d => d.uuid == data.uuid) > -1) {
+      this.removeJobData(data.uuid);
     }
     // Add
     this.setState({job_data: this.state.job_data.concat(data)});
   }
 
-  removeJobData(id) {
-    this.setState({job_data: this.state.job_data.filter(d => d.id != id)});
+  removeJobData(uuid) {
+    this.setState({job_data: this.state.job_data.filter(d => d.uuid != uuid)});
   }
 
   updateJobData(data) {
     this.setState({
       job_data: this.state.job_data.map(d => {
-        if (d.id == data.id) {
+        if (d.uuid == data.uuid) {
           return data;
          } else {
            return d;
