@@ -6,6 +6,11 @@
 * need more information about token - explicitly tell user to retain and use to retrieve results later
   - modal on submission before redirect?
 
+* update time from submitted at reasonable intervals
+  - <1 hour: every minute; <1 day: every hour; <1 year: every day
+  - see timeago.js react github
+  - swap timeago-react for timeago in package.json
+
 * results table
   - button for more info; slide-in element?
   - colour cells of entries that fail classification
@@ -23,6 +28,8 @@
   - large files quickly filing /tmp/
 
 # Backend
+* add much more error handling
+
 * memorable unique token rather than uuid?
 
 * split classification into individual spectracl calls
