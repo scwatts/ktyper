@@ -6,6 +6,9 @@ import history from '../history';
 import './TokenGridComponent.css'
 
 
+import TimeAgo from 'timeago-react';
+
+
 class TokenGridComponent extends React.Component {
   constructor(props) {
     super(props)
@@ -49,7 +52,9 @@ class TokenGridComponent extends React.Component {
                     <Header.Subheader>
                       {d.status.charAt(0).toUpperCase() + d.status.slice(1)}
                     </Header.Subheader>
-                    <Header.Subheader>Submitted 10 mins ago</Header.Subheader>
+                    <Header.Subheader>
+                      Submitted <TimeAgo live={false} datetime={d.created_at} />
+                    </Header.Subheader>
                   </Header.Content>
                 </Header>
               </Grid.Column>
