@@ -3,13 +3,13 @@ import { Grid, Button, Header, Icon, Segment, Transition } from 'semantic-ui-rea
 
 
 import history from '../history';
-import './TokenGridComponent.css'
+import './JobGridComponent.css'
 
 
 import TimeAgo from 'timeago-react';
 
 
-class TokenGridComponent extends React.Component {
+class JobGridComponent extends React.Component {
   constructor(props) {
     super(props)
     this.handleDataClick = this.handleDataClick.bind(this);
@@ -25,14 +25,14 @@ class TokenGridComponent extends React.Component {
         <Segment placeholder>
           <Header icon>
             <Icon name='search' />
-            No tokens found in local browser storage
+            No jobs found in local browser storage
           </Header>
         </Segment>
       );
     } else {
       return (
         <Transition.Group
-          id='token_grid'
+          id='job_grid'
           as={Grid}
           divided='vertically'
           duration={200}
@@ -87,4 +87,4 @@ function renderJobIcon(job_status) {
   }
 }
 
-export default TokenGridComponent;
+export default JobGridComponent;

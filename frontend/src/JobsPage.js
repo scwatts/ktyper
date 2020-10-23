@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button, Form, Header, Message } from 'semantic-ui-react'
 
 
-import TokenGridComponent from './components/TokenGridComponent'
+import JobGridComponent from './components/JobGridComponent'
 
 
 class JobsPage extends React.Component {
@@ -121,7 +121,7 @@ class JobsPage extends React.Component {
             }
           />
         </Form>
-        <TokenGridComponent
+        <JobGridComponent
           job_data={this.props.job_data}
           removeJobData={this.props.removeJobData}
         />

@@ -2,13 +2,13 @@
   float: right;
 }
 
-#token_grid {
+#job_grid {
   width: 400px;
   margin: auto;
   padding-top: 20px;
 }
 
-#token_grid .column {
+#job_grid .column {
   padding: 0px
 }
 
