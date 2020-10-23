@@ -1,23 +1,24 @@
 # Start
+* submit modal 'another submission' button triggers full refresh, clears job data
+  - change to reset state, or
+  - implement persistent storage (this is preferred)
+
+* use better submit modal button colours
+
 * failed jobs on results page
    - Last element of the Step indicator to be swapped for failed
 
 # Frontend
-* need more information about token - explicitly tell user to retain and use to retrieve results later
-  - modal on submission before redirect?
-
-* update time from submitted at reasonable intervals
-  - <1 hour: every minute; <1 day: every hour; <1 year: every day
-  - see timeago.js react github
-  - swap timeago-react for timeago in package.json
-
 * results table
   - button for more info; slide-in element?
   - colour cells of entries that fail classification
   - button(s) to filter for failed, success, species?
-    - clearable dropdown for failed/successed
+    - clearable dropdown for failed/successed; multiselect for species
   - dropdown with search for species to select and multi selection
   - handle pagination
+
+* job list
+  - replace trash icon with circled 'x'
 
 * localStorage to have persistent list of tokens
 * always have scroll bar
