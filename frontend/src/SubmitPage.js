@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button, Form, Header, Message, Progress, Transition } from 'semantic-ui-react'
 
 
-import history from './history';
+import SubmitModal from './components/SubmitModal'
 
 
 class SubmitPage extends React.Component {
@@ -17,6 +17,7 @@ class SubmitPage extends React.Component {
       uploading: false,
       upload_complete: false,
       progress: 0,
+      token: '',
 
       error_name: false,
       error_file: false,
@@ -94,12 +95,13 @@ class SubmitPage extends React.Component {
     };
     axios.post('/api/v1/submit/', data, config)
       .then(resp => {
+        this.props.addJobData(resp.data);
         this.setState({
           processing: false,
           uploading: false,
           upload_complete: true,
+          token: resp.data.uuid,
         });
-        history.push(`/results/${resp.data.uuid}/`);
       })
       .catch(error => {
         this.setState({processing: false});
@@ -173,6 +175,10 @@ class SubmitPage extends React.Component {
             onClick={this.handleSubmit}
           />
         </Form>
+        <SubmitModal
+          token={this.state.token}
+          upload_complete={this.state.upload_complete}
+        />
       </>
     );
   }
