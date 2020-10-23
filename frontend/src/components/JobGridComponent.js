@@ -6,7 +6,31 @@ import history from '../history';
 import './JobGridComponent.css'
 
 
+import * as timeago from 'timeago.js';
 import TimeAgo from 'timeago-react';
+
+
+// Replace live second count with static entry
+const customLocale = (number, index, totalSec) => {
+  return [
+    ['just now', 'right now'],
+    //['%s seconds ago', 'in %s seconds'],
+    ['less than 1 minute ago', 'in less than one minute'],
+    ['1 minute ago', 'in 1 minute'],
+    ['%s minutes ago', 'in %s minutes'],
+    ['1 hour ago', 'in 1 hour'],
+    ['%s hours ago', 'in %s hours'],
+    ['1 day ago', 'in 1 day'],
+    ['%s days ago', 'in %s days'],
+    ['1 week ago', 'in 1 week'],
+    ['%s weeks ago', 'in %s weeks'],
+    ['1 month ago', 'in 1 month'],
+    ['%s months ago', 'in %s months'],
+    ['1 year ago', 'in 1 year'],
+    ['%s years ago', 'in %s years']
+  ][index];
+};
+timeago.register('custom-locale', customLocale);
 
 
 class JobGridComponent extends React.Component {
@@ -53,7 +77,7 @@ class JobGridComponent extends React.Component {
                       {d.status.charAt(0).toUpperCase() + d.status.slice(1)}
                     </Header.Subheader>
                     <Header.Subheader>
-                      Submitted <TimeAgo live={false} datetime={d.created_at} />
+                      Submitted <TimeAgo datetime={d.created_at} locale='custom-locale' />
                     </Header.Subheader>
                   </Header.Content>
                 </Header>
