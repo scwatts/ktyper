@@ -1,3 +1,7 @@
 #result_table_header {
   margin-bottom: 0px;
 }
+
+#result_table_subheader {
+  display: inline;
+}

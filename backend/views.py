@@ -6,6 +6,7 @@ import numpy as np
 
 
 import django.conf
+import django.http
 
 
 import rest_framework
@@ -163,3 +164,32 @@ class ResultData(rest_framework.views.APIView):
                     {'results': result_data},
                     status=rest_framework.status.HTTP_200_OK
             )
+
+
+# TODO: code below is a heavy repeat of ResultData.get, fix
+class DownloadResult(rest_framework.views.APIView):
+
+    def get(self, request, uuid, format=None):
+        # Get job data
+        try:
+            job = backend.models.Job.objects.get(uuid=uuid)
+        except backend.models.Job.DoesNotExist:
+            return rest_framework.response.Response(
+                    {'token': 'Token does not exist'},
+                    status=rest_framework.status.HTTP_400_BAD_REQUEST
+            )
+        # Retrieve results
+        output_dir = pathlib.Path(django.conf.settings.MEDIA_ROOT, str(job.uuid))
+        results_fp = output_dir / 'results.tsv'
+        if job.status != 'completed':
+            return rest_framework.response.Response(
+                    {'info': 'Job incomplete'},
+                    status=rest_framework.status.HTTP_400_BAD_REQUEST
+            )
+        elif not results_fp.exists():
+            return rest_framework.response.Response(
+                    {'info': 'Results file not found'},
+                    status=rest_framework.status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            return django.http.FileResponse(results_fp.open('rb'))
