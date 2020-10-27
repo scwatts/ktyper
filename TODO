@@ -2,16 +2,15 @@
 * use better submit modal button colours
 
 * failed jobs on results page
-   - Last element of the Step indicator to be swapped for failed
+   - last element of the Step indicator to be swapped for failed
 
 # Frontend
 * results table
-  - button for more info; slide-in element?
-  - colour cells of entries that fail classification
-  - button(s) to filter for failed, success, species?
-    - clearable dropdown for failed/successed; multiselect for species
-  - dropdown with search for species to select and multi selection
-  - handle pagination
+  - once when have more result data:
+    - button for more info; slide-in element?
+    - colour cells of entries that fail classification
+    - button(s) to filter for failed, success, species?
+      - clearable dropdown for failed/successed
 
 * job list
   - replace trash icon with circled 'x'
