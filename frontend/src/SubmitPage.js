@@ -24,6 +24,7 @@ class SubmitPage extends React.Component {
       error_name_msg: '',
       error_file_msg: '',
     };
+    this.state_entry = this.state;
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.postJob = this.postJob.bind(this);
@@ -31,6 +32,7 @@ class SubmitPage extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
     this.updateUploadProgress = this.updateUploadProgress.bind(this);
+    this.resetForm = this.resetForm.bind(this);
   };
 
   fileInputRef = React.createRef();
@@ -121,6 +123,10 @@ class SubmitPage extends React.Component {
       });
   }
 
+  resetForm() {
+    this.setState(this.state_entry);
+  }
+
   render() {
     return (
       <>
@@ -134,6 +140,7 @@ class SubmitPage extends React.Component {
         <Form>
           <Form.Input
             label='Job name'
+            value={this.state.name}
             error={this.state.error_name ? {content: this.state.error_name_msg, pointing: 'below'} : false}
             onChange={this.handleNameChange}
           />
@@ -178,6 +185,7 @@ class SubmitPage extends React.Component {
         <SubmitModal
           token={this.state.token}
           upload_complete={this.state.upload_complete}
+          resetForm={this.resetForm}
         />
       </>
     );

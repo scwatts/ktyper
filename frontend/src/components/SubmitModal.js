@@ -42,7 +42,7 @@ class SubmitModal extends React.Component {
           <Button color='black' onClick={() => history.push('/jobs')}>
             Job list
           </Button>
-          <Button color='grey' onClick={() => window.location.reload(false)}>
+          <Button color='grey' onClick={() => this.props.resetForm()}>
             Submit another job
           </Button>
         </Modal.Actions>
