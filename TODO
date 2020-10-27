@@ -1,8 +1,4 @@
 # Start
-* submit modal 'another submission' button triggers full refresh, clears job data
-  - change to reset state, or
-  - implement persistent storage (this is preferred)
-
 * use better submit modal button colours
 
 * failed jobs on results page
@@ -20,7 +16,6 @@
 * job list
   - replace trash icon with circled 'x'
 
-* localStorage to have persistent list of tokens
 * always have scroll bar
 
 * button to force refresh?
