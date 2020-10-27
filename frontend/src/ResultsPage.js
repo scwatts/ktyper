@@ -192,6 +192,7 @@ class ResultsPage extends React.Component {
             <Header as='h3' id='result_table_header'>{this.state.job_data.name}</Header>
             <Header.Subheader id='result_table_subheader'>{this.state.job_data.uuid}</Header.Subheader>
             <Button
+              id='result_download_button'
               disabled={this.state.job_results.length <= 0  || this.state.job_data.status !== 'completed'}
               href={`/api/v1/downloadresult/${this.state.job_token}/`}
               color='red'
