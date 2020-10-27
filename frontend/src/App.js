@@ -29,23 +29,40 @@ class App extends React.Component {
       this.removeJobData(data.uuid);
     }
     // Add
-    this.setState({job_data: this.state.job_data.concat(data)});
+    this.setState({job_data: this.state.job_data.concat(data)}, () => this.writeLocalStorage(this.state));
   }
 
   removeJobData(uuid) {
-    this.setState({job_data: this.state.job_data.filter(d => d.uuid != uuid)});
+    this.setState(
+      {job_data: this.state.job_data.filter(d => d.uuid != uuid)},
+      () => this.writeLocalStorage(this.state)
+    );
   }
 
   updateJobData(data) {
-    this.setState({
-      job_data: this.state.job_data.map(d => {
-        if (d.uuid == data.uuid) {
-          return data;
-         } else {
-           return d;
-         }
-      })
-    });
+    this.setState(
+      {
+        job_data: this.state.job_data.map(d => {
+          if (d.uuid == data.uuid) {
+            return data;
+           } else {
+             return d;
+           }
+        })
+      },
+      () => this.writeLocalStorage(this.state)
+    );
+  }
+
+  writeLocalStorage(state) {
+    localStorage.setItem('job_data', JSON.stringify(state.job_data));
+  }
+
+  componentDidMount() {
+    if (localStorage.hasOwnProperty('job_data')) {
+      var job_data_json = localStorage.getItem('job_data');
+      this.setState({'job_data': JSON.parse(job_data_json)});
+    }
   }
 
   render() {
