@@ -43,7 +43,6 @@ class ResultsPage extends React.Component {
     clearInterval(this.timer);
   }
 
-
   pollResults () {
     // NOTE: this is a little wasteful; conditionally retrieve job_results once
     // status is complete would be better
