@@ -21,11 +21,8 @@ class JobsPage extends React.Component {
     this.handleJobTokenChange = this.handleJobTokenChange.bind(this);
   }
 
-  componentWillMount() {
-    this.pollIncompleteJobs();
-  }
-
   componentDidMount() {
+    this.pollIncompleteJobs();
     this.timer = setInterval(() => this.pollIncompleteJobs(), 1000);
   }
 
