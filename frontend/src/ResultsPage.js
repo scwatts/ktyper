@@ -96,7 +96,7 @@ class ResultsPage extends React.Component {
   }
 
   getJobResults(job_token) {
-    axios.get(`/api/v1/resultsdata/${job_token}/`)
+    axios.get(`/api/v1/resultdata/${job_token}/`)
       .then(resp => {
         this.setState({
           job_results: resp.data['results'],
