@@ -12,6 +12,11 @@
     - button(s) to filter for failed, success, species?
       - clearable dropdown for failed/successed
 
+* job page
+  - inputs: spectra found in uploaded archive
+  - outputs: stdout/stderr; link to results table page
+  - history: timeline showing datetime for upload, init, queueing, execution, and completion
+
 * job list
   - replace trash icon with circled 'x'
 
@@ -29,3 +34,6 @@
 
 * split classification into individual spectracl calls
   - if one bad fid in call, then all will fail
+
+# Tool
+* use rich: https://github.com/willmcgugan/rich
