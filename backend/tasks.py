@@ -38,7 +38,7 @@ def run_classification(job_pk, input_filetype):
 def get_classification_command(results_fp, data_dir):
     # Set base command
     command = [
-        'spectracl',
+        '/opt/ktyper/venv/bin/spectracl',
         f'--spectra_dir {data_dir}',
     ]
     # Check if a sample sheet was provided

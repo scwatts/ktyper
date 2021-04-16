@@ -22,8 +22,8 @@ def get_secret(setting, secrets=secrets):
 
 # Get secret key, force debug off
 SECRET_KEY = get_secret("SECRET_KEY")
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['ktyper.pasteur.fr']
 
 # Set base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
