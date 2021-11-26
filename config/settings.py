@@ -141,3 +141,7 @@ STATICFILES_DIRS = [
 
 # Media location
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
+
+# spectracl data files
+SPECTRACL_MODEL_FP = 'backend/spectracl_data_files/model.bin'
+SPECTRACL_FEATURES_FP = 'backend/spectracl_data_files/features_selected.txt'
