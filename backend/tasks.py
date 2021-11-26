@@ -1,3 +1,4 @@
+import os
 import pathlib
 import subprocess
 import sys
@@ -22,12 +23,41 @@ def run_classification(job_pk, input_filetype):
     run_dir = pathlib.Path(django.conf.settings.MEDIA_ROOT, str(job.uuid))
     data_dir = decompress_data(run_dir, input_filetype)
     results_fp = run_dir / 'results.tsv'
-    # Run spectracl then delete uncompressed data
-    execute_command(f'spectracl --spectra_dir {data_dir} > {results_fp}')
+    # Get command and execute
+    command = get_classification_command(results_fp, data_dir)
+    execute_command(command)
     execute_command(f'rm -r {data_dir}')
     # Update record
     job.status = 'completed'
     job.save()
+
+
+def get_classification_command(results_fp, data_dir):
+    # Set base command
+    command = [
+        'spectracl',
+        f'--spectra_dir {data_dir}',
+    ]
+    # Check if a sample sheet was provided
+    sample_sheet_fp = data_dir / 'sample_sheet.tsv'
+    if sample_sheet_fp.exists():
+        command.append(f'--sample_sheet_fp {sample_sheet_fp}')
+    # Use spectracl data files if configured
+    if hasattr(django.conf.settings, 'SPECTRACL_MODEL_FP'):
+        model_fp = os.path.join(
+            django.conf.settings.BASE_DIR,
+            django.conf.settings.SPECTRACL_MODEL_FP
+        )
+        command.append(f'--model_fp {model_fp}')
+    if hasattr(django.conf.settings, 'SPECTRACL_FEATURES_FP'):
+        features_fp = os.path.join(
+            django.conf.settings.BASE_DIR,
+            django.conf.settings.SPECTRACL_FEATURES_FP
+        )
+        command.append(f'--features_fp {features_fp}')
+    # Set redirect
+    command.append(f'1>{results_fp}')
+    return ' '.join(command)
 
 
 def decompress_data(run_dir, filetype):
