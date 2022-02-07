@@ -1,0 +1,3 @@
+git+https://github.com/scwatts/spectracl.git@v0.0.3
+-r requirements-stable.txt
+# end of file
