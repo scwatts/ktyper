@@ -1,5 +1,4 @@
 import os
-import pathlib
 import subprocess
 import sys
 
@@ -20,7 +19,7 @@ def run_classification(job_pk, input_filetype):
     job.status = 'running'
     job.save()
     # Decompress data
-    run_dir = pathlib.Path(django.conf.settings.MEDIA_ROOT, str(job.uuid))
+    run_dir = job.run_dir
     data_dir = decompress_data(run_dir, input_filetype)
     results_fp = run_dir / 'results.tsv'
     # Get command and execute
