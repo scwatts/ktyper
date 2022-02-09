@@ -25,6 +25,7 @@ class ResultsPage extends React.Component {
     this.prepareResults = this.prepareResults.bind(this);
     this.getJobResults = this.getJobResults.bind(this);
     this.getJobData = this.getJobData.bind(this);
+    this.handlePurge = this.handlePurge.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
   };
 
@@ -101,6 +102,27 @@ class ResultsPage extends React.Component {
           job_results: resp.data['results'],
           query_value: ''
         })
+      })
+      .catch(error => {
+        if (error.response) {
+          if ('token' in error.response.data) {
+            this.setState({
+              error_token: true,
+              error_token_msg: error.response.data['token']
+            });
+          }
+        } else {
+          console.log(error)
+        }
+    });
+  }
+
+  handlePurge(event) {
+    const uuid=this.state.job_token;
+    axios.post(`/api/v1/deletejob/${uuid}/`, {})
+      .then(resp => {
+        this.props.removeJobData(uuid);
+        this.props.history.push('/jobs');
       })
       .catch(error => {
         if (error.response) {
@@ -195,10 +217,16 @@ class ResultsPage extends React.Component {
               id='result_download_button'
               disabled={this.state.job_results.length <= 0  || this.state.job_data.status !== 'completed'}
               href={`/api/v1/downloadresult/${this.state.job_token}/`}
-              color='red'
+              color='blue'
             >
               Download
             </Button>
+            <Button
+              disabled={this.state.job_results.length <= 0  || this.state.job_data.status !== 'completed'}
+              content=' Purge from server'
+              onClick={this.handlePurge}
+              color='red'
+            />
           </>
         }
         {this.state.job_results.length > 0  && this.state.job_data.status == 'completed' ?
