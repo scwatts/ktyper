@@ -1,4 +1,3 @@
-migrations
 config/secrets.json
 db.sqlite3
 __pycache__
