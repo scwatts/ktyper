@@ -34,7 +34,9 @@ class ResultsPage extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-		if (this.props.location !== prevProps.location) {
+    if (this.state.job_data.status == "completed" || this.state.job_data.status == "failed")
+        clearInterval(this.timer);
+    if (this.props.location !== prevProps.location) {
       this.prepareResults();
     }
   }
