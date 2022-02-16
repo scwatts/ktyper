@@ -27,4 +27,3 @@ pip install Django djangorestframework huey pandas scikit-learn scipy ./spectrac
 # TODO
 ## Error handling
 * server does not accept upload
-* huey job returns an error
