@@ -151,6 +151,7 @@ class ResultsPage extends React.Component {
       .catch(error => {
         if (error.response) {
           if ('token' in error.response.data) {
+            this.props.removeJobData(job_token);
             this.setState({
               error_token: true,
               error_token_msg: error.response.data['token']
