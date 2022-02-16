@@ -24,11 +24,15 @@ def run_classification(job_pk, input_filetype):
     results_fp = run_dir / 'results.tsv'
     # Get command and execute
     command = get_classification_command(results_fp, data_dir)
-    execute_command(command)
-    execute_command(f'rm -r {data_dir}')
-    # Update record
-    job.status = 'completed'
-    job.save()
+    try:
+        execute_command(command)
+        job.status = 'completed'
+    except ValueError:
+        job.status = 'failed'
+    finally:
+        execute_command(f'rm -r {data_dir}')
+        # Update record
+        job.save()
 
 
 def get_classification_command(results_fp, data_dir):
@@ -76,5 +80,5 @@ def execute_command(command):
         print('Failed to run command:', result.args, file=sys.stderr)
         print('stdout:', result.stdout, file=sys.stderr)
         print('stderr:', result.stderr, file=sys.stderr)
-        sys.exit(1)
+        raise ValueError
     return result
