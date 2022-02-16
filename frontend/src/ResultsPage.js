@@ -209,8 +209,8 @@ class ResultsPage extends React.Component {
               <>
                 <Segment placeholder>
                   <Header icon>
-                    {renderJobIcon(this.state.job_data.status)}
-                    Job is {this.state.job_data.status}
+                    {renderJobStatusIcon(this.state.job_data.status)}
+                    {renderJobStatusText(this.state.job_data.status)}
                   </Header>
                 </Segment>
               </>
@@ -222,7 +222,7 @@ class ResultsPage extends React.Component {
 
 
 // TODO: reused from ResultsPage.js, cleanup
-function renderJobIcon(job_status) {
+function renderJobStatusIcon(job_status) {
   switch(job_status) {
     case 'initialising':
       return <Icon loading name='circle notch' />;
@@ -236,6 +236,15 @@ function renderJobIcon(job_status) {
       return <Icon name='exclamation circle' color='red' />;
     default:
       return <Icon name='question circle outline' />;
+  }
+}
+
+
+function renderJobStatusText(job_status) {
+  if (job_status === 'failed') {
+    return 'Job failed'
+  } else {
+    return `Job is ${job_status}`
   }
 }
 
