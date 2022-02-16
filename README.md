@@ -11,9 +11,9 @@ Install backend dependencies, migrate database, and launch dev server
 python -m venv ./venv/
 . ./venv/bin/activate
 
-# NOTE(SW): must copy in required data files for spectracl also or set in
+# NOTE(SW): must copy in required data files for spectracl or set in config/settings.py
 git clone https://github.com/scwatts/spectracl.git
-pip install Django djangorestframework huey pandas scikit-learn scipy ./spectracal/
+pip install Django djangorestframework huey pandas scikit-learn scipy ./spectracl/
 
 ./manage.py makemigrations backend
 ./manage.py migrate
