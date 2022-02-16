@@ -93,6 +93,7 @@ class App extends React.Component {
                   render={props => <ResultsPage
                       addJobData={this.addJobData}
                       updateJobData={this.updateJobData}
+                      removeJobData={this.removeJobData}
                       {...props}
                     />
                   }

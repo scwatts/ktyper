@@ -193,3 +193,20 @@ class DownloadResult(rest_framework.views.APIView):
             )
         else:
             return django.http.FileResponse(results_fp.open('rb'))
+
+
+class DeleteJob(rest_framework.views.APIView):
+
+    def post(self, request, uuid, format=None):
+        try:
+            job = backend.models.Job.objects.get(uuid=uuid)
+            job.delete()
+            return rest_framework.response.Response(
+                {'info': 'Job and data removed'},
+                status=rest_framework.status.HTTP_202_ACCEPTED
+            )
+        except backend.models.Job.DoesNotExist:
+            return rest_framework.response.Response(
+                {'token': 'Token does not exist'},
+                status=rest_framework.status.HTTP_400_BAD_REQUEST
+            )
