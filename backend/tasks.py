@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import sys
 
@@ -22,6 +23,18 @@ def run_classification(job_pk, input_filetype):
     run_dir = job.run_dir
     data_dir = decompress_data(run_dir, input_filetype)
     results_fp = run_dir / 'results.tsv'
+    # Ensure valid paths
+    fps_invalid = list()
+    for fp in pathlib.Path(run_dir).rglob('*'):
+        fp_str = str(fp)
+        if re.search(r'[^ a-zA-Z0-9_./\-]', fp_str):
+            fps_invalid.append(fp_str)
+    if fps_invalid:
+        fps_invalid_str = ', '.join(fps_invalid)
+        print(f'Found invalid input filepaths after decompressing: {fps_invalid_str}', file=sys.stderr)
+        job.status = 'failed'
+        job.save()
+        return
     # Get command and execute
     command = get_classification_command(results_fp, data_dir)
     try:
