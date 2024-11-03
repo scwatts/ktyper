@@ -24,4 +24,8 @@ class JobSerialiser(rest_framework.serializers.ModelSerializer):
         if file_count != 1:
             raise rest_framework.serializers.ValidationError({'file': f'Expected one file but got {file_count}'})
 
+        # Input filename
+        if re.search(r'[^ a-zA-Z0-9_.-]', self.context.get('file')[0].name):
+            raise rest_framework.serializers.ValidationError({'file': 'Filename contains invalid characters'})
+
         return data
