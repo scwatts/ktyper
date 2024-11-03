@@ -1,4 +1,3 @@
-import os
 import re
 import subprocess
 import sys
@@ -59,17 +58,12 @@ def get_classification_command(results_fp, data_dir):
     if sample_sheet_fp.exists():
         command.append(f'--sample_sheet_fp {sample_sheet_fp}')
     # Use spectracl data files if configured
+    django_base_dir = pathlib.Path(django.conf.settings.BASE_DIR)
     if hasattr(django.conf.settings, 'SPECTRACL_MODEL_FP'):
-        model_fp = os.path.join(
-            django.conf.settings.BASE_DIR,
-            django.conf.settings.SPECTRACL_MODEL_FP
-        )
+        model_fp = django_base_dir / django.conf.settings.SPECTRACL_MODEL_FP
         command.append(f'--model_fp {model_fp}')
     if hasattr(django.conf.settings, 'SPECTRACL_FEATURES_FP'):
-        features_fp = os.path.join(
-            django.conf.settings.BASE_DIR,
-            django.conf.settings.SPECTRACL_FEATURES_FP
-        )
+        features_fp = django_base_dir / django.conf.settings.SPECTRACL_FEATURES_FP
         command.append(f'--features_fp {features_fp}')
     # Set redirect
     command.append(f'1>{results_fp}')
